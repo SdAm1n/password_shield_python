@@ -14,3 +14,10 @@
   - [ ] AES Implementation
 - [ ] Setup 2FA
 - [ ] Encrypt the Generated Keys
+
+## How to run
+
+```bash
+python -m pip install -r requirements.txt
+python main.py
+```
