@@ -15,6 +15,11 @@
 - [ ] Setup 2FA
 - [ ] Encrypt the Generated Keys
 
+## Important Note
+
+- Create a branch then edit and push that branch
+- Only i will merge to the main branch
+
 ## How to run
 
 ```bash
