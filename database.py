@@ -30,7 +30,6 @@ def createdb(db_path):
 
     # execute create table command
     cur.execute("""CREATE TABLE plist (
-        id INTEGER PRIMARY KEY,
         website TEXT,
         username TEXT,
         password TEXT
@@ -40,23 +39,9 @@ def createdb(db_path):
     closedb(conn)
 
 
-# adjust the id field if deleted
-def adjustid(db_path):
-    conn, cur = connectdb(db_path)
-
-    cur.execute("SELECT id FROM plist ORDER BY id")
-    ids = cur.fetchall()
-
-    new_id = 1
-    for id in ids:
-        cur.execute("UPDATE plist SET id=? WHERE id=?", (new_id, id[0]))
-        new_id += 1
-
-    closedb(conn)
-
-
 # print the table in a nice format
 def prettyprint(records, headers):
+
     print(tabulate(records, headers=headers, tablefmt="fancy_grid"))
 
 
@@ -65,6 +50,7 @@ def storepwd(db_path, website, username, password):
 
     conn, cur = connectdb(db_path)
 
+    # TODO: Encrypt the password before storing
     cur.execute("""INSERT INTO plist (website, username, password)
         VALUES (?, ?, ?)
     """, (website, username, password))
@@ -98,23 +84,44 @@ def changepwd(db_path):
 
     conn, cur = connectdb(db_path)
 
-    print("Enter the id of the password you want to change")
-    id = input("Enter id: ")
-    password = input("Enter new password: ")
+    print("Enter the website, username and new password to change the password")
 
-    # TODO: Encrypt the password before storing
-    cur.execute("""UPDATE plist SET password=?
-        WHERE id = ?
-    """, (password, id))
+    website = input("Enter website: ")
+    username = input("Enter username: ")
+    password = input("Enter new password: ")
+    cur.execute("""UPDATE plist SET password=? 
+                WHERE website=? AND username=?""",
+                (password, website, username))
+
     closedb(conn)
 
 
-def deletepwd():
-    ...
+# delete password in database
+def deletepwd(db_path):
+
+    printall(db_path)
+
+    conn, cur = connectdb(db_path)
+
+    print("Enter the website and username to delete the password")
+
+    website = input("Enter website: ")
+    username = input("Enter username: ")
+    cur.execute("""DELETE FROM plist 
+                    WHERE website=? AND username=?""",
+                (website, username))
+
+    closedb(conn)
 
 
-def deletedb():
-    ...
+# delete the database
+def deletedb(db_path):
+
+    conn, cur = connectdb(db_path)
+
+    cur.execute("DROP TABLE plist")
+
+    closedb(conn)
 
 
 # prints all the records from the database except id

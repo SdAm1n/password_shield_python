@@ -43,6 +43,20 @@ def menu():
                 print("Password:", generated_pwd)
                 print()
 
+            elif option == 's':
+                clearscr()
+                website = input("Enter Website: ")
+                username = input("Enter Username: ")
+                password = input("Enter Password: ")
+                database.storepwd(database_path, website, username, password)
+
+            elif option == 'f':
+                clearscr()
+                # find by website or username
+                findby = input(
+                    "Find Password by (w)ebsite or (u)sername: ").lower()
+                database.findpwd(database_path, findby)
+
             elif option == 'c':
                 clearscr()
                 database.changepwd(database_path)
@@ -52,19 +66,29 @@ def menu():
                 print("Updated table:")
                 database.printall(database_path)
 
-            elif option == 'f':
+            elif option == 'd':
                 clearscr()
-                # find by website or username
-                findby = input(
-                    "Find Password by (w)ebsite or (u)sername: ").lower()
-                database.findpwd(database_path, findby)
+               # deleteby one or delete all
+                deleteby = input("delete (o)ne or (a)ll: ").lower()
+                if deleteby == 'o':
+                    database.deletepwd(database_path)
+                    clearscr()
+                    database.printall(database_path)
 
-            elif option == 's':
-                clearscr()
-                website = input("Enter Website: ")
-                username = input("Enter Username: ")
-                password = input("Enter Password: ")
-                database.storepwd(database_path, website, username, password)
+                elif deleteby == 'a':
+                    database.deletedb(database_path)
+                    clearscr()
+                    print("All passwords deleted successfully")
+                    print("Removing database file from the system")
+                    os.remove(database_path)
+                    choice = input(
+                        "Do you want to create a new database? (y/n): ").lower()
+                    if choice == 'y':
+                        database.createdb(database_path)
+                        clearscr()
+                        print("New database created successfully")
+                    else:
+                        sys.exit("Quiting the program....")
 
             elif option == 'a':
                 clearscr()
