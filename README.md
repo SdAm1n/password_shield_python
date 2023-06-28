@@ -13,10 +13,10 @@
   - [ ] advance password generation
   - [ ] Save generated password to database option
 - [x] Setup Database with sqlite3
-- [ ] Encrypt Password
+- [x] Encrypt Password
   - [x] RSA Implementation
   - [x] AES Implementation
-  - [ ] Hybrid Implementation
+  - [x] Hybrid Implementation
 - [x] Setup 2FA
 - [ ] Auto copy Password
 - [ ] Encrypt the Generated Keys
