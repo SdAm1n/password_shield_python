@@ -1,5 +1,5 @@
 from interface import menu
-from master_password import verify_masterpwd, create_masterpwd
+from masterpwd import verify_masterpwd, create_masterpwd
 import sys
 from os.path import exists
 from database import createdb

@@ -1,5 +1,8 @@
 import argon2
 import sys
+from keygen import aes_key, rsa_key
+from os.path import exists
+
 
 ph = argon2.PasswordHasher(memory_cost=488281)
 
@@ -26,6 +29,10 @@ def verify_masterpwd(hash_file_path):
         except argon2.exceptions.VerifyMismatchError:
             return False
         else:
+            # generate aes key and assign it to aeskey
+            aeskey = aes_key(master_pwd)
+            if not exists("private.pem") or not exists("public.pem"):
+                rsa_key()   # generate rsa key
             return True
 
 
@@ -39,6 +46,15 @@ def create_masterpwd(hash_file_path):
     hash = generate_hash(master_pwd)    # hash value
     with open(hash_file_path, "w") as file:  # write hash value to file
         file.write(hash)
+    print("Master Password created successfully")
+
+    print("Generating AES key...")
+    aeskey = aes_key(master_pwd)    # generate aes key and assign it to aeskey
+    print("AES key generated successfully")
+
+    print("Generating RSA key...")
+    rsa_key()   # generate rsa key
+    print("RSA key generated successfully")
 
 
 # change master password

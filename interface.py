@@ -1,4 +1,4 @@
-from generate_password import generatepwd
+from genpwd import generatepwd
 import os
 import sys
 import database

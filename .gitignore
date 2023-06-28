@@ -3,3 +3,5 @@ __*
 .vscode
 *.argon2
 *.db
+*.pem
+*.bin
