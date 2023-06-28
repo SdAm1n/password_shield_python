@@ -2,3 +2,4 @@ __*
 .venv
 .vscode
 *.argon2
+*.db

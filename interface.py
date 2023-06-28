@@ -1,6 +1,10 @@
 from generate_password import generatepwd
 import os
 import sys
+import database
+
+
+database_path = "password_list.db"
 
 
 # to clear terminal
@@ -36,3 +40,5 @@ def menu():
                 generated_pwd = generatepwd()
                 print("Password:", generated_pwd)
                 print()
+            elif option == 'a':
+                database.printall(database_path)
