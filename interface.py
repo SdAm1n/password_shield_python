@@ -56,6 +56,17 @@ def menu():
                 generated_pwd = generatepwd()
                 print("Password:", generated_pwd)
                 print()
+                choice = input(
+                    "Do you want to store this password? (y/n): ").lower()
+                if choice == 'y':
+                    clearscr()
+                    website = input("Enter Website: ")
+                    username = input("Enter Username: ")
+                    password = generated_pwd
+                    database.storepwd(database_path, website,
+                                      username, password)
+                else:
+                    print("Password not stored.....")
 
             elif option == 's':
                 clearscr()

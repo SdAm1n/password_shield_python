@@ -11,7 +11,7 @@
 - [x] password masking
 - [x] Generate Password
   - [ ] advance password generation
-  - [ ] Save generated password to database option
+  - [x] Save generated password to database option
 - [x] Setup Database with sqlite3
 - [x] Encrypt Password
   - [x] RSA Implementation
