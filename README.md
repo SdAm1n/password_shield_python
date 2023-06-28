@@ -11,14 +11,15 @@
   - [ ] secure the hash file
 - [x] Generate Password
   - [ ] advance password generation
-- [ ] Setup Database with sqlite3
+- [x] Setup Database with sqlite3
 - [ ] Auto copy Password
 - [ ] Encrypt Password
-  - [ ] RSA Implementation
-  - [ ] AES Implementation
+  - [x] RSA Implementation
+  - [x] AES Implementation
+  - [ ] Hybrid Implementation
 - [ ] Setup 2FA
 - [ ] Encrypt the Generated Keys
-- [ ] Store the keys (give user the opotion?)
+- [ ] Store the keys (give user the option?)
 
 ## Important Note
 
