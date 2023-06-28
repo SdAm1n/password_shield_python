@@ -3,7 +3,7 @@ from masterpwd import verify_masterpwd, create_masterpwd
 import sys
 from os.path import exists
 from database import createdb
-from twoFA import get_key, generate_otp, verify_otp
+from enckeys import encrypt_file, decrypt_file
 
 
 hash_file_path = "password_hash.argon2"  # password hash file path
@@ -36,10 +36,36 @@ def main():
             print("Creating a new database...")
             createdb(database_path)
 
+        if exists("private.pem"):
+            try:
+                decrypt_file("private.pem")
+            except FileNotFoundError:
+                pass
+        if exists("receiver.pem"):
+            try:
+                decrypt_file("receiver.pem")
+            except FileNotFoundError:
+                pass
+
         # calls the menu() from menu.py
         menu()
 
     except (KeyboardInterrupt, EOFError):   # handles Ctrl + c and Ctrl + d
+
+        if exists("private.pem"):
+            try:
+                encrypt_file("private.pem")
+            except NameError:
+                # if the user quits before entering the master password
+                sys.exit("Quitted Prematurely")
+
+        if exists("receiver.pem"):
+            try:
+                encrypt_file("receiver.pem")
+            except NameError:
+                # if the user quits before entering the master password
+                sys.exit("Quitted Prematurely")
+
         sys.exit("Quitted Prematurely")
 
 

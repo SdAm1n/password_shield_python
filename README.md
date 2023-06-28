@@ -19,7 +19,7 @@
   - [x] Hybrid Implementation
 - [x] Setup 2FA
 - [ ] Auto copy Password
-- [ ] Encrypt the Generated Keys
+- [x] Encrypt the Generated Keys
 - [ ] Store the keys (give user the option?)
 - [x] Encrypt whole Database with pysqlcipher3
 

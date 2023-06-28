@@ -2,6 +2,7 @@ from genpwd import generatepwd
 import os
 import sys
 import database
+from enckeys import encrypt_file, decrypt_file
 
 
 database_path = "password_list.db"
@@ -37,6 +38,12 @@ def menu():
         else:
 
             if option == 'q':
+                if os.path.exists("private.pem"):
+                    encrypt_file("private.pem")
+
+                if os.path.exists("receiver.pem"):
+                    encrypt_file("receiver.pem")
+
                 sys.exit("Quiting the program....")
 
             elif option == 'g':
