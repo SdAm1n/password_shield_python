@@ -40,5 +40,14 @@ def menu():
                 generated_pwd = generatepwd()
                 print("Password:", generated_pwd)
                 print()
+            elif option == 'f':
+                ...
+            elif option == 's':
+                clearscr()
+                website = input("Enter Website: ")
+                username = input("Enter Username: ")
+                password = input("Enter Password: ")
+                database.storepwd(database_path, website, username, password)
             elif option == 'a':
+                clearscr()
                 database.printall(database_path)

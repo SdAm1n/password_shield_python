@@ -1,5 +1,21 @@
 import sqlite3
+# tabulate is used to print the table in a nice format
 from tabulate import tabulate
+
+
+# adjust the id field if deleted
+def adjustid(db_path):
+    conn, cur = connectdb(db_path)
+
+    cur.execute("SELECT id FROM plist ORDER BY id")
+    ids = cur.fetchall()
+
+    new_id = 1
+    for id in ids:
+        cur.execute("UPDATE plist SET id=? WHERE id=?", (new_id, id[0]))
+        new_id += 1
+
+    closedb(conn)
 
 
 # Connect to a database
@@ -39,8 +55,16 @@ def createdb(db_path):
     closedb(conn)
 
 
-def storepwd():
-    ...
+# store password in database
+def storepwd(db_path, website, username, password):
+
+    conn, cur = connectdb(db_path)
+
+    cur.execute("""INSERT INTO plist (website, username, password)
+        VALUES (?, ?, ?)
+    """, (website, username, password))
+
+    closedb(conn)
 
 
 def findpwd():
@@ -59,6 +83,7 @@ def deletedb():
     ...
 
 
+# prints all the records from the database except id
 def printall(db_path):
     conn, cur = connectdb(db_path)
 
@@ -67,9 +92,9 @@ def printall(db_path):
     records = cur.fetchall()
     headers = [i[0] for i in cur.description]
 
-    records = [record[1:] for record in records]
-    headers = headers[1:]
-    # You must decrypt the password before printing
+    # records = [record[1:] for record in records]
+    # headers = headers[1:]
+    # TODO: Decrypt the password before printing
     print(tabulate(records, headers=headers, tablefmt="fancy_grid"))
 
     closedb(conn)
