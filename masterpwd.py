@@ -40,6 +40,7 @@ def generate_hash(master_pwd):
 # verify a password hash
 def verify_masterpwd(hash_file_path):
 
+    global master_pwd
     master_pwd = input("Enter Master Password: ")
     # match the hash value with the file hash value
     with open(hash_file_path, 'r') as file:
@@ -70,6 +71,7 @@ def create_masterpwd(hash_file_path):
     # then genereate a new hash
     print("You need to create a Master Password to continue.")
     print("Remember if you loose your master password, everything will be lost")
+    global master_pwd
     master_pwd = input("Enter Master Password: ")
     hash = generate_hash(master_pwd)    # hash value
     with open(hash_file_path, "w") as file:  # write hash value to file
@@ -94,6 +96,10 @@ def create_masterpwd(hash_file_path):
 
 def get_aes():
     return aeskey
+
+
+def get_masterpwd():
+    return master_pwd
 
 
 # change master password

@@ -1,17 +1,23 @@
-import sqlite3
+from pysqlcipher3 import dbapi2 as sqlite3
 # tabulate is used to print the table in a nice format
 from tabulate import tabulate
 from hybridenc import *
+from masterpwd import get_masterpwd
+
 
 # Connect to a database
-
-
 def connectdb(db_path):
+
     # connect to database
     conn = sqlite3.connect(db_path)
 
     # create a cursor
     cur = conn.cursor()
+
+    # set key for database from user password
+    cur.execute(f"PRAGMA key='{get_masterpwd()}'")
+    # for SQLCipher compatibility
+    cur.execute("PRAGMA cipher_compatibility = 3")
 
     return conn, cur
 
