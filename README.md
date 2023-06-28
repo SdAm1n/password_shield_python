@@ -11,6 +11,7 @@
   - [ ] secure the hash file
 - [x] Generate Password
   - [ ] advance password generation
+  - [ ] Save generated password to database option
 - [x] Setup Database with sqlite3
 - [ ] Encrypt Password
   - [x] RSA Implementation

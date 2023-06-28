@@ -55,8 +55,11 @@ def verify_masterpwd(hash_file_path):
             verify_twoFA(master_pwd)  # verify otp when the user tries to login
 
             # generate aes key and assign it to aeskey
+            global aeskey
             aeskey = aes_key(master_pwd)
-            if not exists("private.pem") or not exists("public.pem"):
+
+            if not exists("private.pem") or not exists("receiver.pem"):
+                print("Generating RSA key...")
                 rsa_key()   # generate rsa key
             return True
 
@@ -80,12 +83,17 @@ def create_masterpwd(hash_file_path):
     verify_twoFA(master_pwd)
 
     print("Generating AES key...")
+    global aeskey
     aeskey = aes_key(master_pwd)    # generate aes key and assign it to aeskey
     print("AES key generated successfully")
 
     print("Generating RSA key...")
     rsa_key()   # generate rsa key
     print("RSA key generated successfully")
+
+
+def get_aes():
+    return aeskey
 
 
 # change master password

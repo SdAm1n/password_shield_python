@@ -1,9 +1,11 @@
 import sqlite3
 # tabulate is used to print the table in a nice format
 from tabulate import tabulate
-
+from hybridenc import *
 
 # Connect to a database
+
+
 def connectdb(db_path):
     # connect to database
     conn = sqlite3.connect(db_path)
@@ -32,7 +34,10 @@ def createdb(db_path):
     cur.execute("""CREATE TABLE plist (
         website TEXT,
         username TEXT,
-        password TEXT
+        enc_session_key BLOB,
+        nonce BLOB,
+        tag BLOB,
+        ciphertext BLOB
     )
     """)
 
@@ -42,7 +47,16 @@ def createdb(db_path):
 # print the table in a nice format
 def prettyprint(records, headers):
 
-    print(tabulate(records, headers=headers, tablefmt="fancy_grid"))
+    new_records = []
+    for row in range(len(records)):
+
+        password = decryptpwd(records[row][2],
+                              records[row][3], records[row][4], records[row][5])
+        new_records.append(
+            (records[row][0], records[row][1],  password))
+
+    headers = headers[0], headers[1], "password"
+    print(tabulate(new_records, headers=headers, tablefmt="fancy_grid"))
 
 
 # store password in database
@@ -51,9 +65,13 @@ def storepwd(db_path, website, username, password):
     conn, cur = connectdb(db_path)
 
     # TODO: Encrypt the password before storing
-    cur.execute("""INSERT INTO plist (website, username, password)
-        VALUES (?, ?, ?)
-    """, (website, username, password))
+    password = password.encode("utf-8")
+    enc_session_key, nonce, tag, ciphertext = encryptpwd(password)
+    cur.execute("""INSERT INTO plist (
+        website, username, enc_session_key, nonce, tag, ciphertext)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """,
+                (website, username, memoryview(enc_session_key), memoryview(nonce), memoryview(tag), memoryview(ciphertext)))
 
     closedb(conn)
 
@@ -62,7 +80,6 @@ def storepwd(db_path, website, username, password):
 def findpwd(db_path, findby):
 
     conn, cur = connectdb(db_path)
-    # TODO: Decrypt the password before printing
     if findby == 'w':
         website = input("Enter website: ")
         cur.execute("SELECT * FROM plist WHERE website=?", (website,))
@@ -70,7 +87,9 @@ def findpwd(db_path, findby):
         username = input("Enter username: ")
         cur.execute("SELECT * FROM plist WHERE username=?", (username,))
 
+    # TODO: Decrypt the password before printing
     records = cur.fetchall()
+
     headers = [i[0] for i in cur.description]
     prettyprint(records, headers)
 
@@ -89,9 +108,13 @@ def changepwd(db_path):
     website = input("Enter website: ")
     username = input("Enter username: ")
     password = input("Enter new password: ")
-    cur.execute("""UPDATE plist SET password=? 
+
+    # Encrypt the password before storing
+    password = password.encode("utf-8")
+    enc_session_key, nonce, tag, ciphertext = encryptpwd(password)
+    cur.execute("""UPDATE plist SET enc_session_key=?, nonce=?, tag=?, ciphertext=? 
                 WHERE website=? AND username=?""",
-                (password, website, username))
+                (memoryview(enc_session_key), memoryview(nonce), memoryview(tag), memoryview(ciphertext), website, username))
 
     closedb(conn)
 
@@ -127,14 +150,15 @@ def deletedb(db_path):
 # prints all the records from the database except id
 def printall(db_path):
     conn, cur = connectdb(db_path)
-
+    # conn.row_factory = sqlite3.Row
     cur.execute("SELECT * FROM plist")
 
     records = cur.fetchall()
+
     headers = [i[0] for i in cur.description]
 
     # records = [record[1:] for record in records]
-    # headers = headers[1:]
-    # TODO: Decrypt the password before printing
+
+    # Decrypt the password before printing
     prettyprint(records, headers)
     closedb(conn)
