@@ -1,3 +1,7 @@
+"""
+This module generates a random secure password
+"""
+
 import secrets
 import string
 

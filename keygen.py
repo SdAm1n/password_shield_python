@@ -1,3 +1,8 @@
+"""
+This file is used to generate the AES key from a password
+and RSA key pair.
+"""
+
 # AES Key generation from password so that
 # we do not need to save it to a disk
 

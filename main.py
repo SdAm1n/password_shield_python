@@ -1,3 +1,8 @@
+"""
+This is the main file of the program. It contains the 
+main function that calls the menu function from menu.py
+"""
+
 from interface import menu
 from masterpwd import verify_masterpwd, create_masterpwd
 import sys

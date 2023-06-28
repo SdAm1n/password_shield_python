@@ -1,3 +1,7 @@
+"""
+This file contains the functions to encrypt and decrypt files using AES.
+"""
+
 from masterpwd import get_aes
 from Cryptodome.Cipher import AES
 import os

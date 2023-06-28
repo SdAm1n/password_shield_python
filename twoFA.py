@@ -1,3 +1,7 @@
+"""
+This file contains the functions to generate and verify OTP using pyotp and qrcode
+"""
+
 import pyotp
 import qrcode
 from PIL import Image

@@ -1,3 +1,10 @@
+"""
+This file contains the functions to encrypt and decrypt the password using RSA and AES.
+First RSA Public Key is used to encrypt the AES session key and then AES is 
+used to encrypt the password.
+RSA Private Key and the encrypted AES session key is used to decrypt the Password.
+"""
+
 from Cryptodome.PublicKey import RSA
 from Cryptodome.Cipher import AES, PKCS1_OAEP
 from masterpwd import get_aes

@@ -1,3 +1,8 @@
+"""
+This file contains the menu function which is used to display the menu to the user
+and call the functions from other files according to the user's choice.
+"""
+
 from genpwd import generatepwd
 import os
 import sys

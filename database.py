@@ -1,3 +1,12 @@
+"""
+This file contains functions for creating, retrieving, 
+updating and deleting passwords from the database.
+This file also contains functions for printing the table in a nice format.
+This file also contains functions for encrypting and decrypting passwords.
+This file also encrypts and decrypts the database.
+"""
+
+
 from pysqlcipher3 import dbapi2 as sqlite3
 # tabulate is used to print the table in a nice format
 from tabulate import tabulate
