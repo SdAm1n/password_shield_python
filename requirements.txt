@@ -2,6 +2,7 @@ argon2-cffi==21.3.0
 argon2-cffi-bindings==21.2.0
 cffi==1.15.1
 Pillow==9.5.0
+pwinput==1.0.3
 pycparser==2.21
 pycryptodome-test-vectors==1.0.12
 pycryptodomex==3.18.0

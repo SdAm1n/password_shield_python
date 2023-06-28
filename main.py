@@ -36,12 +36,12 @@ def main():
             print("Creating a new database...")
             createdb(database_path)
 
-        if exists("private.pem"):
+        if exists("private.pem.encrypted"):
             try:
                 decrypt_file("private.pem")
             except FileNotFoundError:
                 pass
-        if exists("receiver.pem"):
+        if exists("receiver.pem.encrypted"):
             try:
                 decrypt_file("receiver.pem")
             except FileNotFoundError:

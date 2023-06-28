@@ -5,7 +5,7 @@ import os
 
 def encrypt_file(file_path):
 
-    print("Encrypting File...")
+    # print("Encrypting File...")
 
     key = get_aes()
 
@@ -24,14 +24,14 @@ def encrypt_file(file_path):
             for x in (nonce, tag, ciphertext):
                 enc_file.write(x)
 
-    print("Successfully Encrypted File...")
-    print("Deleting Original File...")
+    # print("Successfully Encrypted File...")
+    # print("Deleting Original File...")
     os.remove(file_path)
 
 
 def decrypt_file(file_path):
 
-    print("Decrypting File...")
+    # print("Decrypting File...")
 
     key = get_aes()
 
@@ -48,6 +48,6 @@ def decrypt_file(file_path):
         with open(file_path, "wb") as priv_file:
             priv_file.write(data)
 
-    print("Successfully Decrypted File...")
-    print("Deleting Encrypted File...")
+    # print("Successfully Decrypted File...")
+    # print("Deleting Encrypted File...")
     os.remove(f"{file_path}.encrypted")

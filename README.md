@@ -6,9 +6,9 @@
   - [ ] Make Menu Beautiful
   - [ ] Handle Ctrl + z
 - [x] Hash Master Password with Argon2
-  - [ ] password masking
   - [ ] Add more functionality
   - [ ] secure the hash file
+- [x] password masking
 - [x] Generate Password
   - [ ] advance password generation
   - [ ] Save generated password to database option

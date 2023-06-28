@@ -6,6 +6,7 @@ This file also contains functions for generating rsa and aes keys.
 
 import argon2
 import sys
+import pwinput
 from keygen import aes_key, rsa_key
 from os.path import exists
 from twoFA import generate_otp, verify_otp
@@ -41,7 +42,7 @@ def generate_hash(master_pwd):
 def verify_masterpwd(hash_file_path):
 
     global master_pwd
-    master_pwd = input("Enter Master Password: ")
+    master_pwd = pwinput.pwinput(prompt="Enter Master Password: ", mask='*')
     # match the hash value with the file hash value
     with open(hash_file_path, 'r') as file:
         try:
@@ -59,9 +60,10 @@ def verify_masterpwd(hash_file_path):
             global aeskey
             aeskey = aes_key(master_pwd)
 
-            if not exists("private.pem") or not exists("receiver.pem"):
-                print("Generating RSA key...")
-                rsa_key()   # generate rsa key
+            if not exists("private.pem.encrypted") or not exists("receiver.pem.encrypted"):
+                # if the user quits before entering the master password
+                sys.exit(
+                    "Private key or Public key is missing. Exiting the program...")
             return True
 
 
@@ -72,7 +74,7 @@ def create_masterpwd(hash_file_path):
     print("You need to create a Master Password to continue.")
     print("Remember if you loose your master password, everything will be lost")
     global master_pwd
-    master_pwd = input("Enter Master Password: ")
+    master_pwd = pwinput.pwinput(prompt="Enter Master Password: ", mask='*')
     hash = generate_hash(master_pwd)    # hash value
     with open(hash_file_path, "w") as file:  # write hash value to file
         file.write(hash)
