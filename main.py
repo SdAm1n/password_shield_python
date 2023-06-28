@@ -3,6 +3,8 @@ from masterpwd import verify_masterpwd, create_masterpwd
 import sys
 from os.path import exists
 from database import createdb
+from twoFA import get_key, generate_otp, verify_otp
+
 
 hash_file_path = "password_hash.argon2"  # password hash file path
 database_path = "password_list.db"      # stored password data base path

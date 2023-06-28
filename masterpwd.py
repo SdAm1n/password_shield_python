@@ -1,10 +1,29 @@
+"""
+This file contains functions for creating and verifying master password by using argon2id.
+This file also contains functions for generating and verifying otp.
+This file also contains functions for generating rsa and aes keys.
+"""
+
 import argon2
 import sys
 from keygen import aes_key, rsa_key
 from os.path import exists
+from twoFA import generate_otp, verify_otp
 
 
 ph = argon2.PasswordHasher(memory_cost=488281)
+
+
+# verify otp when the user tries to login
+def verify_twoFA(master_pwd):
+    otp_count = 5
+    while True:
+        otp_count -= 1
+        # verify otp when the user tries to login
+        if verify_otp(master_pwd) == True:
+            break
+        elif otp_count == 0:
+            sys.exit("Too many Tries. Exiting the program...")
 
 
 # func for generating hash value using argon2id
@@ -29,6 +48,12 @@ def verify_masterpwd(hash_file_path):
         except argon2.exceptions.VerifyMismatchError:
             return False
         else:
+            if not exists("qrcode.png"):
+                # generate otp and generate qr code from it only once when the user creates the master password
+                generate_otp(master_pwd)
+
+            verify_twoFA(master_pwd)  # verify otp when the user tries to login
+
             # generate aes key and assign it to aeskey
             aeskey = aes_key(master_pwd)
             if not exists("private.pem") or not exists("public.pem"):
@@ -47,6 +72,12 @@ def create_masterpwd(hash_file_path):
     with open(hash_file_path, "w") as file:  # write hash value to file
         file.write(hash)
     print("Master Password created successfully")
+
+    # generate otp and generate qr code from it only once when the user creates the master password
+    generate_otp(master_pwd)
+
+    # verify otp when the user creates the master password
+    verify_twoFA(master_pwd)
 
     print("Generating AES key...")
     aeskey = aes_key(master_pwd)    # generate aes key and assign it to aeskey

@@ -18,7 +18,9 @@ def clearscr():
 # a simple menu function
 def menu():
     # calling until user quits
+    clearscr()
     while True:
+
         print("\nMENU")
         print("-----------------")
         print("(G)enearate Password")
