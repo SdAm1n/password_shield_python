@@ -33,21 +33,30 @@ def menu():
         except ValueError:  # if user inputs invalid Choice
             print("Enter a valid Choice: ")
         else:
+
             if option == 'q':
                 sys.exit("Quiting the program....")
+
             elif option == 'g':
                 clearscr()
                 generated_pwd = generatepwd()
                 print("Password:", generated_pwd)
                 print()
+
             elif option == 'f':
-                ...
+                clearscr()
+                # find by website or username
+                findby = input(
+                    "Find Password by (w)ebsite or (u)sername: ").lower()
+                database.findpwd(database_path, findby)
+
             elif option == 's':
                 clearscr()
                 website = input("Enter Website: ")
                 username = input("Enter Username: ")
                 password = input("Enter Password: ")
                 database.storepwd(database_path, website, username, password)
+
             elif option == 'a':
                 clearscr()
                 database.printall(database_path)
