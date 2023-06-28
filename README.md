@@ -12,12 +12,12 @@
 - [x] Generate Password
   - [ ] advance password generation
 - [x] Setup Database with sqlite3
-- [ ] Auto copy Password
 - [ ] Encrypt Password
   - [x] RSA Implementation
   - [x] AES Implementation
   - [ ] Hybrid Implementation
 - [ ] Setup 2FA
+- [ ] Auto copy Password
 - [ ] Encrypt the Generated Keys
 - [ ] Store the keys (give user the option?)
 
