@@ -8,6 +8,7 @@ import os
 import sys
 import database
 from enckeys import encrypt_file, decrypt_file
+import pyperclip
 
 
 database_path = "password_list.db"
@@ -54,7 +55,9 @@ def menu():
             elif option == 'g':
                 clearscr()
                 generated_pwd = generatepwd()
+                pyperclip.copy(generated_pwd)
                 print("Password:", generated_pwd)
+                print("Password copied to clipboard")
                 print()
                 choice = input(
                     "Do you want to store this password? (y/n): ").lower()

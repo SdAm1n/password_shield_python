@@ -55,7 +55,7 @@ def main():
         # calls the menu() from menu.py
         menu()
 
-    except (KeyboardInterrupt, EOFError):   # handles Ctrl + c and Ctrl + d
+    except:   # handles all exceptions
 
         if exists("private.pem"):
             try:
@@ -71,7 +71,7 @@ def main():
                 # if the user quits before entering the master password
                 sys.exit("Quitted Prematurely")
 
-        sys.exit("Quitted Prematurely")
+        sys.exit("Quitting the program...")
 
 
 if __name__ == "__main__":

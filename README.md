@@ -10,17 +10,16 @@
   - [ ] secure the hash file
 - [x] password masking
 - [x] Generate Password
-  - [ ] advance password generation
   - [x] Save generated password to database option
+  - [ ] advance password generation
 - [x] Setup Database with sqlite3
 - [x] Encrypt Password
   - [x] RSA Implementation
   - [x] AES Implementation
   - [x] Hybrid Implementation
 - [x] Setup 2FA
-- [ ] Auto copy Password
+- [x] Auto copy Password
 - [x] Encrypt the Generated Keys
-- [ ] Store the keys (give user the option?)
 - [x] Encrypt whole Database with pysqlcipher3
 
 ## Important Note
@@ -41,7 +40,14 @@ sudo apt install libsqlcipher-dev
 paru libqsqlcipher
 ```
 
-- Then install the requirements.txt and run the main.py file
+- Then install xclip for auto copying password
+
+```bash
+# for arch based distros
+sudo pacman -Syu xclip
+```
+
+- Finally install the requirements.txt and run the main.py file
 
 ```bash
 pip install -r requirements.txt
