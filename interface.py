@@ -43,6 +43,15 @@ def menu():
                 print("Password:", generated_pwd)
                 print()
 
+            elif option == 'c':
+                clearscr()
+                database.changepwd(database_path)
+
+                clearscr()
+                print("Password changed successfully")
+                print("Updated table:")
+                database.printall(database_path)
+
             elif option == 'f':
                 clearscr()
                 # find by website or username

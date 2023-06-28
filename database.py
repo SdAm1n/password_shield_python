@@ -72,7 +72,9 @@ def storepwd(db_path, website, username, password):
     closedb(conn)
 
 
+# find password in database
 def findpwd(db_path, findby):
+
     conn, cur = connectdb(db_path)
     # TODO: Decrypt the password before printing
     if findby == 'w':
@@ -89,8 +91,22 @@ def findpwd(db_path, findby):
     closedb(conn)
 
 
-def changepwd():
-    ...
+# change password in database
+def changepwd(db_path):
+
+    printall(db_path)
+
+    conn, cur = connectdb(db_path)
+
+    print("Enter the id of the password you want to change")
+    id = input("Enter id: ")
+    password = input("Enter new password: ")
+
+    # TODO: Encrypt the password before storing
+    cur.execute("""UPDATE plist SET password=?
+        WHERE id = ?
+    """, (password, id))
+    closedb(conn)
 
 
 def deletepwd():
