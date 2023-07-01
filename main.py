@@ -37,7 +37,7 @@ def main():
             create_masterpwd(hash_file_path)
 
         # if password list database is not detected create a new one
-        if not exists(database_path):
+        if not exists(f"{database_path}"):
             print("Creating a new database...")
             createdb(database_path)
 
@@ -55,7 +55,7 @@ def main():
         # calls the menu() from menu.py
         menu()
 
-    except:   # handles all exceptions
+    except (ValueError, EOFError, KeyboardInterrupt):   # handles all exceptions
 
         if exists("private.pem"):
             try:

@@ -6,12 +6,14 @@ This file also contains functions for encrypting and decrypting passwords.
 This file also encrypts and decrypts the database.
 """
 
-
-from pysqlcipher3 import dbapi2 as sqlite3
+from time import time
+# from pysqlcipher3 import dbapi2 as sqlite3
+import sqlite3
 # tabulate is used to print the table in a nice format
 from tabulate import tabulate
 from hybridenc import *
 from masterpwd import get_masterpwd
+from rsaenc import rsa_encrypt, rsa_decrypt, rsa_keygen
 
 
 # Connect to a database
@@ -23,10 +25,10 @@ def connectdb(db_path):
     # create a cursor
     cur = conn.cursor()
 
-    # set key for database from user password
-    cur.execute(f"PRAGMA key='{get_masterpwd()}'")
-    # for SQLCipher compatibility
-    cur.execute("PRAGMA cipher_compatibility = 3")
+    # # set key for database from user password
+    # cur.execute(f"PRAGMA key='{get_masterpwd()}'")
+    # # for SQLCipher compatibility
+    # cur.execute("PRAGMA cipher_compatibility = 3")
 
     return conn, cur
 
@@ -164,6 +166,7 @@ def deletedb(db_path):
 
 # prints all the records from the database except id
 def printall(db_path):
+    start = time()
     conn, cur = connectdb(db_path)
     # conn.row_factory = sqlite3.Row
     cur.execute("SELECT * FROM plist")
@@ -177,3 +180,83 @@ def printall(db_path):
     # Decrypt the password before printing
     prettyprint(records, headers)
     closedb(conn)
+    end = time()
+    print(end - start)
+
+
+def encrypt_all(db_path):
+
+    print("generating rsa keys...")
+    rsa_keygen()
+    print("rsa keys generated...")
+
+    print("encrypting database...")
+
+    new_db_path = f"enc_{db_path}"
+    connectdb(new_db_path)
+    conn, cur = connectdb(new_db_path)
+    cur.execute("""CREATE TABLE encplist (
+        website BLOB,
+        username BLOB,
+        enc_session_key BLOB,
+        nonce BLOB,
+        tag BLOB,
+        ciphertext BLOB
+    )
+    """)
+    conn.commit()
+
+    conn2, cur2 = connectdb(db_path)
+    cur2.execute("SELECT * FROM plist")
+    conn2.commit()
+    records = cur2.fetchall()
+    # print(records[0][0])
+    for row in range(len(records)):
+        website = rsa_encrypt(records[row][0].encode("utf-8"))
+        username = rsa_encrypt(records[row][1].encode("utf-8"))
+        enc_session_key = records[row][2]
+        nonce = records[row][3]
+        tag = records[row][4]
+        ciphertext = records[row][5]
+
+        cur.execute("""INSERT INTO encplist (
+            website, username, enc_session_key, nonce, tag, ciphertext)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """,
+                    (memoryview(website), memoryview(username), memoryview(enc_session_key), memoryview(nonce), memoryview(tag), memoryview(ciphertext)))
+        conn.commit()
+
+    print("deleting old database...")
+
+    closedb(conn2)
+    closedb(conn)
+
+    print("database encrypted...")
+
+
+def decrypt_all(db_path):
+
+    print("decrypting database...")
+
+    conn, cur = connectdb(db_path)
+
+    conn2, cur2 = connectdb(f"enc_{db_path}")
+    cur2.execute("SELECT * FROM encplist")
+    records = cur2.fetchall()
+    for row in range(len(records)):
+        website = rsa_decrypt(records[row][0]).decode("utf-8")
+        username = rsa_decrypt(records[row][1]).decode("utf-8")
+        enc_session_key = records[row][2]
+        nonce = records[row][3]
+        tag = records[row][4]
+        ciphertext = records[row][5]
+
+        cur.execute("""INSERT INTO plist (
+            website, username, enc_session_key, nonce, tag, ciphertext)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """,
+                    (website, username, memoryview(enc_session_key), memoryview(nonce), memoryview(tag), memoryview(ciphertext)))
+        conn.commit()
+    closedb(conn2)
+    closedb(conn)
+    print("database decrypted...")

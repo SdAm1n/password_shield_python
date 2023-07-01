@@ -15,7 +15,7 @@ database_path = "password_list.db"
 
 
 # to clear terminal
-def clearscr():
+def cliearscr():
     if os.name == "nt":     # for detecting windows operating system
         os.system("cls")
     else:                   # for detecting linux/mac (os.name == "posix")
@@ -25,7 +25,11 @@ def clearscr():
 # a simple menu function
 def menu():
     # calling until user quits
-    clearscr()
+    cliearscr()
+    if os.path.exists(f"enc_{database_path}"):
+        database.decrypt_all(database_path)
+        os.remove(f"enc_{database_path}")
+
     while True:
 
         print("\nMENU")
@@ -44,6 +48,10 @@ def menu():
         else:
 
             if option == 'q':
+
+                database.encrypt_all(database_path)
+                os.remove(database_path)
+
                 if os.path.exists("private.pem"):
                     encrypt_file("private.pem")
 
@@ -53,7 +61,7 @@ def menu():
                 sys.exit("Quiting the program....")
 
             elif option == 'g':
-                clearscr()
+                cliearscr()
                 generated_pwd = generatepwd()
                 pyperclip.copy(generated_pwd)
                 print("Password:", generated_pwd)
@@ -62,7 +70,7 @@ def menu():
                 choice = input(
                     "Do you want to store this password? (y/n): ").lower()
                 if choice == 'y':
-                    clearscr()
+                    cliearscr()
                     website = input("Enter Website: ")
                     username = input("Enter Username: ")
                     password = generated_pwd
@@ -72,40 +80,40 @@ def menu():
                     print("Password not stored.....")
 
             elif option == 's':
-                clearscr()
+                cliearscr()
                 website = input("Enter Website: ")
                 username = input("Enter Username: ")
                 password = input("Enter Password: ")
                 database.storepwd(database_path, website, username, password)
 
             elif option == 'f':
-                clearscr()
+                cliearscr()
                 # find by website or username
                 findby = input(
                     "Find Password by (w)ebsite or (u)sername: ").lower()
                 database.findpwd(database_path, findby)
 
             elif option == 'c':
-                clearscr()
+                cliearscr()
                 database.changepwd(database_path)
 
-                clearscr()
+                cliearscr()
                 print("Password changed successfully")
                 print("Updated table:")
                 database.printall(database_path)
 
             elif option == 'd':
-                clearscr()
-               # deleteby one or delete all
+                cliearscr()
+                # deleteby one or delete all
                 deleteby = input("delete (o)ne or (a)ll: ").lower()
                 if deleteby == 'o':
                     database.deletepwd(database_path)
-                    clearscr()
+                    cliearscr()
                     database.printall(database_path)
 
                 elif deleteby == 'a':
                     database.deletedb(database_path)
-                    clearscr()
+                    cliearscr()
                     print("All passwords deleted successfully")
                     print("Removing database file from the system")
                     os.remove(database_path)
@@ -113,11 +121,11 @@ def menu():
                         "Do you want to create a new database? (y/n): ").lower()
                     if choice == 'y':
                         database.createdb(database_path)
-                        clearscr()
+                        cliearscr()
                         print("New database created successfully")
                     else:
                         sys.exit("Quiting the program....")
 
             elif option == 'a':
-                clearscr()
+                cliearscr()
                 database.printall(database_path)

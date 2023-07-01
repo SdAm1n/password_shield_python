@@ -29,7 +29,7 @@ def aes_key(password):
 def rsa_key():
 
     # RSA.generate(bits, randfunc=None, progress_func=None, e=65537)
-    key = RSA.generate(2048)
+    key = RSA.generate(4096)
 
     # RSA private key
     private_key = key.export_key()
