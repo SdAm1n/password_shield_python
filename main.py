@@ -7,7 +7,8 @@ from interface import menu
 from masterpwd import verify_masterpwd, create_masterpwd
 import sys
 from os.path import exists
-from database import createdb
+from os import remove
+from database import createdb, encrypt_all
 from enckeys import encrypt_file, decrypt_file
 
 
@@ -56,6 +57,9 @@ def main():
         menu()
 
     except (ValueError, EOFError, KeyboardInterrupt):   # handles all exceptions
+
+        encrypt_all(database_path)
+        remove(database_path)   # removes the database file (import os)
 
         if exists("private.pem"):
             try:
