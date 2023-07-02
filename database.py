@@ -7,13 +7,28 @@ This file also encrypts and decrypts the database.
 """
 
 from time import time
-# from pysqlcipher3 import dbapi2 as sqlite3
+from pysqlcipher3 import dbapi2 as sqlite
 import sqlite3
 # tabulate is used to print the table in a nice format
 from tabulate import tabulate
 from hybridenc import *
 from masterpwd import get_masterpwd
 from rsaenc import rsa_encrypt, rsa_decrypt, rsa_keygen
+
+
+def enc_connectdb(db_path):
+    # connect to database
+    conn = sqlite.connect(db_path)
+
+    # create a cursor
+    cur = conn.cursor()
+
+    # set key for database from user password
+    cur.execute(f"PRAGMA key='{get_masterpwd()}'")
+    # for SQLCipher compatibility
+    cur.execute("PRAGMA cipher_compatibility = 3")
+
+    return conn, cur
 
 
 # Connect to a database
@@ -25,7 +40,7 @@ def connectdb(db_path):
     # create a cursor
     cur = conn.cursor()
 
-    # # set key for database from user password
+    # set key for database from user password
     # cur.execute(f"PRAGMA key='{get_masterpwd()}'")
     # # for SQLCipher compatibility
     # cur.execute("PRAGMA cipher_compatibility = 3")
@@ -193,8 +208,10 @@ def encrypt_all(db_path):
     print("encrypting database...")
 
     new_db_path = f"enc_{db_path}"
-    connectdb(new_db_path)
-    conn, cur = connectdb(new_db_path)
+
+    conn, cur = enc_connectdb(new_db_path)
+
+    # execute create table command to store encrypted passwords in newly created database
     cur.execute("""CREATE TABLE encplist (
         website BLOB,
         username BLOB,
@@ -215,9 +232,9 @@ def encrypt_all(db_path):
         website = rsa_encrypt(records[row][0].encode("utf-8"))
         username = rsa_encrypt(records[row][1].encode("utf-8"))
         enc_session_key = records[row][2]
-        nonce = records[row][3]
-        tag = records[row][4]
-        ciphertext = records[row][5]
+        nonce = rsa_encrypt(records[row][3])
+        tag = rsa_encrypt(records[row][4])
+        ciphertext = rsa_encrypt(records[row][5])
 
         cur.execute("""INSERT INTO encplist (
             website, username, enc_session_key, nonce, tag, ciphertext)
@@ -240,16 +257,17 @@ def decrypt_all(db_path):
 
     conn, cur = connectdb(db_path)
 
-    conn2, cur2 = connectdb(f"enc_{db_path}")
+    conn2, cur2 = enc_connectdb(f"enc_{db_path}")
+
     cur2.execute("SELECT * FROM encplist")
     records = cur2.fetchall()
     for row in range(len(records)):
         website = rsa_decrypt(records[row][0]).decode("utf-8")
         username = rsa_decrypt(records[row][1]).decode("utf-8")
         enc_session_key = records[row][2]
-        nonce = records[row][3]
-        tag = records[row][4]
-        ciphertext = records[row][5]
+        nonce = rsa_decrypt(records[row][3])
+        tag = rsa_decrypt(records[row][4])
+        ciphertext = rsa_decrypt(records[row][5])
 
         cur.execute("""INSERT INTO plist (
             website, username, enc_session_key, nonce, tag, ciphertext)
