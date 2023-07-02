@@ -20,6 +20,7 @@
 - [x] Setup 2FA
 - [x] Auto copy Password
 - [x] Encrypt the Generated Keys
+- [x] Encrypt the encrypted data with RSA
 - [x] Encrypt whole Database with pysqlcipher3
 
 ## Important Note

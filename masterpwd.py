@@ -12,7 +12,8 @@ from os.path import exists
 from twoFA import generate_otp, verify_otp
 
 
-ph = argon2.PasswordHasher(memory_cost=488281)
+ph = argon2.PasswordHasher(
+    time_cost=3, memory_cost=488281, parallelism=4, hash_len=32)
 
 
 # verify otp when the user tries to login

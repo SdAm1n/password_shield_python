@@ -1,3 +1,7 @@
+"""
+This module contains the functions for RSA encryption and decryption.
+"""
+
 from Cryptodome.PublicKey import RSA
 from Cryptodome.Cipher import PKCS1_OAEP
 
