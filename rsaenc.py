@@ -7,7 +7,7 @@ from Cryptodome.Cipher import PKCS1_OAEP
 
 
 def rsa_keygen():
-    key = RSA.generate(2048)
+    key = RSA.generate(4096)
     private_key = key.export_key()
     file_out = open("private2.pem", "wb")
     file_out.write(private_key)

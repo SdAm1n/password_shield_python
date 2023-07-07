@@ -1,6 +1,8 @@
 """
 This is the main file of the program. It contains the 
 main function that calls the menu function from menu.py
+and also contains the code for verifying the master password
+and creating a new database if it doesn't exist.
 """
 
 from interface import menu
