@@ -26,12 +26,6 @@ Password Shield is a password manager using AES, RSA, PBKDF2, and Argon2 algorit
 - [x] Encrypt the encrypted data with RSA
 - [x] Encrypt whole Database with pysqlcipher3
 
-## Important Note
-
-- Create a branch (e.g. dev) then edit and push that branch
-- Only i will merge to the main branch
-- And obviously do not make the repo public
-- Add any file in .gitignore if you want it to be ignored
 
 ## How to run
 
