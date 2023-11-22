@@ -3,6 +3,31 @@
 
 Password Shield is a password manager using AES, RSA, PBKDF2, and Argon2 algorithms. This is a highly experimental project to test out the capabilities of a password manager and what one can do with these various algorithms and technologies. Google Authenticator app is used for two-factor authentication. Sqlite3 was chosen as it was lightweight and easy to implement. Used many Python libraries like Pycryptodome for encryption algorithms, Pysqlcipher for encrypting databases, Argon2 for argon2id hashing algorithms, Pillow for qrcode image generation, and  Secrets for generating random passwords cryptographically.
 
+## How to run
+
+- first you need to install libsqlcipher-dev for sqlite3 encryption to work
+
+```bash
+# for debian based distros
+sudo apt install libsqlcipher-dev
+# for arch based distros install from the AUR
+paru libqsqlcipher
+```
+
+- Then install xclip for auto copying password
+
+```bash
+# for arch based distros
+sudo pacman -Syu xclip
+```
+
+- Finally install from the requirements.txt and run the main.py file
+
+```bash
+pip install -r requirements.txt
+python main.py
+```
+
 ## TODO
 
 - [x] Design Menu
@@ -26,28 +51,3 @@ Password Shield is a password manager using AES, RSA, PBKDF2, and Argon2 algorit
 - [x] Encrypt the encrypted data with RSA
 - [x] Encrypt whole Database with pysqlcipher3
 
-
-## How to run
-
-- first you need to install libsqlcipher-dev for sqlite3 encryption to work
-
-```bash
-# for debian based distros
-sudo apt install libsqlcipher-dev
-# for arch based distros install from the AUR
-paru libqsqlcipher
-```
-
-- Then install xclip for auto copying password
-
-```bash
-# for arch based distros
-sudo pacman -Syu xclip
-```
-
-- Finally install the requirements.txt and run the main.py file
-
-```bash
-pip install -r requirements.txt
-python main.py
-```
